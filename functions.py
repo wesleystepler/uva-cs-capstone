@@ -22,7 +22,7 @@ def get_all_playlists_titles(username):
 
 def get_playlist_tracks(playlist_id):
     contents = []
-    results = sp.playlist_tracks(playlist_id, fields='items.track.name, items.track.id, items.track.uri, items.track.explicit, items.track.artists, items.track.album.name, total', limit=100, offset=0, market=None, additional_types=('track', 'episode',))
+    results = sp.playlist_tracks(playlist_id, fields='items.track.name, items.track.id, items.track.uri, items.track.explicit, items.track.artists, items.track.album.name, items.track.popularity, total', limit=100, offset=0, market=None, additional_types=('track', 'episode',))
     tracks = results['items']
     for track in tracks:
         album = track['track']['album']['name']
@@ -30,6 +30,7 @@ def get_playlist_tracks(playlist_id):
         id = track['track']['id']
         uri = track['track']['uri']
         explicit = track['track']['explicit']
+        popularity = track['track']['popularity']
         if len(track['track']['artists']) == 1:
             artists = track['track']['artists'][0]['name']
         else:
@@ -39,18 +40,21 @@ def get_playlist_tracks(playlist_id):
             s = ", "
             artists = s.join(contributors)
 
-        s = Song(name=title, id=id, artists=artists, album=album, uri=uri, explicit=explicit)
+        s = Song(name=title, id=id, artists=artists, album=album, uri=uri, explicit=explicit, popularity=popularity)
         contents.append(s)
         # print(f"Song: {title}") 
         # print(f"By: {artists}") 
         # print(f"Album: {album}")
         # print()
+    if len(contents) == 100:
+        contents.append("Showing the first 100 tracks of the playlist. You can view the entire playlist in the Spotify App")
     return contents
 
 
 pls = get_all_playlists_titles('thelogicalpianist')
+print(pls)
 
-songs = get_playlist_tracks(pls["Stompin' and Hollerin'"])
+songs = get_playlist_tracks(pls["Worship"])
 
 for s in songs:
-    print(s.name)
+    print(s)

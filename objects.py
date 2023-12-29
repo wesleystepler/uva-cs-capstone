@@ -14,7 +14,7 @@ class Artist():
 
 
 class Song():
-    def __init__(self, name, id, artists, album, uri, explicit):
+    def __init__(self, name, id, artists, album, uri, explicit, popularity):
         super().__init__()
         self.name = name
         self.id = id
@@ -22,5 +22,9 @@ class Song():
         self.album = album
         self.uri = uri
         self.explicit = explicit
+        self.popularity = popularity
+
+    def __str__(self):
+        return f"Title: {self.name} \nArtist(s): {self.artists} \nAlbum: {self.album} \nURI: {self.uri} \nID: {self.id} \nExplicit: {self.explicit} \nPopularity: {self.popularity}\n"
 
     
